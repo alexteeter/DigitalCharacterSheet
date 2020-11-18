@@ -21,6 +21,8 @@ def get_character():
         if event == 'Load Character':
             try:
                 character = open_character()
+                if character == None:
+                    character = get_character()
                 break
             except:
                 pass
@@ -37,14 +39,19 @@ def get_character():
 def open_character():
     print('Opening Character...')
     #character = dnd.load_character(sg.popup_get_file('Open Character'))
-    character = dnd.load_character(get_save(get_savelist()))
+    try:
+        character = dnd.load_character(get_save(get_savelist()))
+    except:
+        print('Failed to open characer!')
+        sg.PopupError('Failed to Open Character!')
+        return None
     print(character.name + ' loaded!')
     return character
 
 def display_character(ch):
     print('Displaying Character...')
     #############################################
-    menu_def = [['File', ['Open', 'Save', 'New']],
+    menu_def = [['File', ['Open', 'Save', 'New', 'Delete...']],
                 ['Edit', ['Change Stats']],
                 ['Help']]
     hitDice_frame = [[sg.T(ch.currentHitDice, key='-currentHitDice-'), sg.T(' / ' + ch.hitDice)],
@@ -268,6 +275,8 @@ def display_character(ch):
                     pass
             else:
                 openWindow.close()
+        if event == 'Delete...':
+            del_prompt()
         if event == 'Change Stats':
             try:
                 changeStats(window, ch)
@@ -463,6 +472,54 @@ def create_character():
         sg.PopupError('Failed to Create Character!', icon = images.dragon)
         return None
     return character
+
+def del_prompt():
+    print('Selecting who to delete...')
+    layout = [[sg.Text('Delete Character:', font = 'Any 20')]]
+    col1 = [[]]
+    col2 = [[]]
+    index = 0
+    savelist = get_savelist()
+    for save in savelist.keys():
+        if index%2 == 0:
+            col1 += [[sg.Button(save)]]
+        else:
+            col2 += [[sg.Button(save)]]
+        index += 1
+    layout += [[sg.Column(col1), sg.Column(col2)]]
+    window = sg.Window('Open Character',layout, icon = images.dragon)
+    while True:
+        event, values = window.read()
+        if event is None:
+            break
+        else:
+            del_character(event)
+            break
+    window.close()
+    
+def del_character(name):
+    layout = [[sg.Text('Are you sure you want to delete ' + name + '?')],
+                [sg.Button('Yes'), sg.Button('No')]]
+    window = sg.Window('Delete Character', layout, icon = images.dragon)
+    while True:
+        event, values = window.read()
+        if event == 'Yes':
+            print('Removing ' + name + ' from saves list...')
+            savelist = get_savelist()
+            savefile = savelist[name]
+            del savelist[name]
+            saves = str(dnd.path) + '/characters/saves.json'
+            with open(saves, 'w') as json_file:
+                json.dump(savelist, json_file)
+            
+            print('Deleting ' + name + '...')
+            os.remove(savefile)
+            print('Deleted ' + name + '!')
+            sg.Popup('Deleted ' + name + '!', icon = images.dragon)
+            break
+        if event == None or event == 'No':
+            break
+    window.close()
 
 def changeStats(window, ch):
     print('Changing stats...')
