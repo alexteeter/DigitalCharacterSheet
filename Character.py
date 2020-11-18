@@ -70,123 +70,123 @@ class Character:
     
     def get_str_save(self):
         self.strSave = self.get_str_mod()
-        if 'Strength' in self.proficiencies:
+        if 'strength' in self.proficiencies:
             self.strSave += int(self.prof)
         return self.strSave
     def get_dex_save(self):
         self.dexSave = self.get_dex_mod()
-        if 'Dex' in self.proficiencies:
+        if 'dex' in self.proficiencies:
             self.dexSave += int(self.prof)
         return self.dexSave
     def get_con_save(self):
         self.conSave = self.get_con_mod()
-        if 'Con' in self.proficiencies:
+        if 'con' in self.proficiencies or 'constitution' in self.proficiencies:
             self.conSave += int(self.prof)
         return self.conSave
     def get_int_save(self):
         self.intSave = self.get_int_mod()
-        if 'Intelligence' in self.proficiencies:
+        if 'intelligence' in self.proficiencies:
             self.intSave += int(self.prof)
         return self.intSave
     def get_wis_save(self):
         wisSave = self.get_wis_mod()
-        if 'Wisdom' in self.proficiencies:
+        if 'wisdom' in self.proficiencies:
             wisSave = int(wisSave) + int(self.prof)
         return wisSave
     def get_cha_save(self):
         self.chaSave = self.get_cha_mod()
-        if 'Charisma' in self.proficiencies:
+        if 'charisma' in self.proficiencies:
             self.chaSave += int(self.prof)
         return self.chaSave
 
     def get_acrobatics(self):
         self.acrobatics = self.get_dex_mod()
-        if 'Acrobatics' in self.proficiencies:
+        if 'acrobatics' in self.proficiencies:
             self.acrobatics += int(self.prof)
         return self.acrobatics
     def get_athletics(self):
         self.athletics = self.get_str_mod()
-        if 'Athletics' in self.proficiencies:
+        if 'athletics' in self.proficiencies:
             self.athletics += int(self.prof)
         return self.athletics
     def get_animal_handling(self):
         self.animalHandling = self.get_wis_mod()
-        if 'Animal Handling' in self.proficiencies:
+        if 'animal handling' in self.proficiencies:
             self.animalHandling += int(self.prof)
         return self.animalHandling
     def get_arcana(self):
         self.arcana = self.get_int_mod()
-        if 'Arcana' in self.proficiencies:
+        if 'arcana' in self.proficiencies:
             self.arcana += int(self.prof)
         return self.arcana
     def get_deception(self):
         self.deception = self.get_cha_mod()
-        if 'Deception' in self.proficiencies:
+        if 'deception' in self.proficiencies:
             self.deception += int(self.prof)
         return self.deception
     def get_history(self):
         self.history = self.get_int_mod()
-        if 'History' in self.proficiencies:
+        if 'history' in self.proficiencies:
             self.history += int(self.prof)
         return self.history
     def get_insight(self):
         self.insight = self.get_wis_mod()
-        if 'Insight' in self.proficiencies:
+        if 'insight' in self.proficiencies:
             self.insight += int(self.prof)
         return self.insight
     def get_investigation(self):
         self.investigation = self.get_int_mod()
-        if 'Investigation' in self.proficiencies:
+        if 'investigation' in self.proficiencies:
             self.investigation += int(self.prof)
         return self.investigation
     def get_intimidation(self):
         self.intimidation = self.get_cha_mod()
-        if 'Intimidation' in self.proficiencies:
+        if 'intimidation' in self.proficiencies:
             self.intimidation += int(self.prof)
         return self.intimidation   
     def get_medicine(self):
         self.medicine = self.get_wis_mod()
-        if 'Medicine' in self.proficiencies:
+        if 'medicine' in self.proficiencies:
             self.medicine += int(self.prof)
         return self.medicine 
     def get_nature(self):
         self.nature = self.get_int_mod()
-        if 'Nature' in self.proficiencies:
+        if 'nature' in self.proficiencies:
             self.nature += int(self.prof)
         return self.nature
     def get_perception(self):
         self.perception = self.get_wis_mod()
-        if 'Perception' in self.proficiencies:
+        if 'perception' in self.proficiencies:
             self.perception += int(self.prof)
         return self.perception
     def get_performance(self):
         self.performance = self.get_cha_mod()
-        if 'Performance' in self.proficiencies:
+        if 'performance' in self.proficiencies:
             self.performance += int(self.prof)
         return self.performance
     def get_persuasion(self):
         self.persuasion = self.get_cha_mod()
-        if 'Persuasion' in self.proficiencies:
+        if 'persuasion' in self.proficiencies:
             self.persuasion += int(self.prof)
         return self.persuasion
     def get_religion(self):
         self.religion = self.get_int_mod()
-        if 'Religion' in self.proficiencies:
+        if 'religion' in self.proficiencies:
             self.religion += int(self.prof)
         return self.religion
     def get_sleight_of_hand(self):
         self.sleightOfHand = self.get_dex_mod()
-        if 'Sleight of Hand' in self.proficiencies:
+        if 'sleight of hand' in self.proficiencies:
             self.sleightOfHand += int(self.prof)
         return self.sleightOfHand
     def get_stealth(self):
         self.stealth = self.get_dex_mod()
-        if 'Stealth' in self.proficiencies:
+        if 'stealth' in self.proficiencies:
             self.stealth += int(self.prof)
         return self.stealth
     def get_survival(self):
         self.survival = self.get_wis_mod()
-        if 'Survival' in self.proficiencies:
+        if 'survival' in self.proficiencies:
             self.survival += int(self.prof)
         return self.survival
      
@@ -427,7 +427,8 @@ def load_character(file):
         ch.current_spell_slots = eval(config['STATUS']['current_spell_slots'])
     except:
         pass
-    ch.proficiencies = eval(config['STATS']['proficiencies'])
+    proficiencies = eval(config['STATS']['proficiencies'])
+    ch.proficiencies = [string.casefold() for string in proficiencies]
     ch.equipment = eval(config['EQUIPMENT']['equipment'])
     ch.weapons = eval(config['EQUIPMENT']['weapons'])
     return ch

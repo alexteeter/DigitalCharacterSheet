@@ -444,6 +444,7 @@ def create_character():
     hitDice = values['-hitDice-']
     profRaw = values['-proficiencies-']
     proficiencies = profRaw.split(', ')
+    [string.casefold() for string in proficiencies]
     gold = values['-gold-']
     #equipmentRaw = values['-equipment-']
     #equipment = equipmentRaw.split(', ')
@@ -578,57 +579,57 @@ def changeStats(window, ch):
             ch.set_prof(sg.popup_get_text('Enter New Proficiency Bonus:', icon = images.dragon))
             window['-passive-'].update(ch.get_passive_perception())
             window['-prof-'].update(ch.prof)
-            if 'Strength' in ch.proficiencies:
+            if 'strength' in ch.proficiencies:
                 window['-strSave-'].update(ch.get_str_save())
-            if 'Dexterity' in ch.proficiencies:
+            if 'dexterity' in ch.proficiencies:
                 window['-dexSave-'].update(ch.get_dex_save())
                 window['-dexMod-'].update(ch.get_dex_mod())
-            if 'Constitution' in ch.proficiencies:
+            if 'constitution' in ch.proficiencies:
                 window['-conSave-'].update(ch.get_con_save())
                 window['-conMod-'].update(ch.get_con_mod())
-            if 'Intelligence' in ch.proficiencies:
+            if 'intelligence' in ch.proficiencies:
                 window['-intSave-'].update(ch.get_int_save())
                 window['-intSave-'].update(ch.get_int_save())
-            if 'Wisdom' in ch.proficiencies:
+            if 'wisdom' in ch.proficiencies:
                 window['-wisSave-'].update(ch.get_wis_save())
-            if 'Charisma' in ch.proficiencies:
+            if 'charisma' in ch.proficiencies:
                 window['-chaSave-'].update(ch.get_cha_save())
             
-            if 'Acrobatics' in ch.proficiencies:
+            if 'acrobatics' in ch.proficiencies:
                 window['-acro-'].update(ch.get_acrobatics())
-            if 'Animal Handling' in ch.proficiencies:
+            if 'animal handling' in ch.proficiencies:
                 window['-animal-'].update(ch.get_animal_handling())
-            if 'Arcana' in ch.proficiencies:
+            if 'arcana' in ch.proficiencies:
                 window['-arcnana-'].update(ch.get_arcana())
-            if 'Athletics' in ch.proficiencies:
+            if 'athletics' in ch.proficiencies:
                 window['-athletics-'].update(ch.get_athletics())
-            if 'Deception' in ch.proficiencies:
+            if 'deception' in ch.proficiencies:
                 window['-deception-'].update('Deception: '+str(ch.get_deception()))
-            if 'History' in ch.proficiencies:
+            if 'history' in ch.proficiencies:
                 window['-history-'].update('History: '+str(ch.get_history()))
-            if 'Insight' in ch.proficiencies:
+            if 'insight' in ch.proficiencies:
                 window['-insight-'].update('Insight: '+str(ch.get_insight()))
-            if 'Intimidation' in ch.proficiencies:
+            if 'intimidation' in ch.proficiencies:
                 window['-intimidation-'].update('Intimidation: '+str(ch.get_intimidation()))
-            if 'Investigation' in ch.proficiencies:
+            if 'investigation' in ch.proficiencies:
                 window['-investigation-'].update('Investigation: '+str(ch.get_investigation()))
-            if 'Medicine' in ch.proficiencies:
+            if 'medicine' in ch.proficiencies:
                 window['-medicine-'].update('Medicine: '+str(ch.get_medicine()))
-            if 'Nature' in ch.proficiencies:
+            if 'nature' in ch.proficiencies:
                 window['-nature-'].update('Nature: '+str(ch.get_nature()))
-            if 'Perception' in ch.proficiencies:
+            if 'perception' in ch.proficiencies:
                 window['-perception-'].update('Perception: '+str(ch.get_perception()))
-            if 'Performance' in ch.proficiencies:
+            if 'performance' in ch.proficiencies:
                 window['-performance-'].update('Performance: '+str(ch.get_performance()))
-            if 'Persuasion' in ch.proficiencies:
+            if 'persuasion' in ch.proficiencies:
                 window['-persuasion-'].update('Persuasion: '+str(ch.get_persuasion()))
-            if 'Religion' in ch.proficiencies:
+            if 'religion' in ch.proficiencies:
                 window['-religion-'].update('Religion: '+str(ch.get_religion()))
-            if 'Sleight of Hand' in ch.proficiencies:
+            if 'sleight of hand' in ch.proficiencies:
                 window['-sleight-'].update('Sleight of Hand: '+str(ch.get_sleight_of_hand()))
-            if 'Stealth' in ch.proficiencies:
+            if 'stealth' in ch.proficiencies:
                 window['-stealth-'].update('Stealth: '+str(ch.get_stealth()))
-            if 'Survival' in ch.proficiencies:
+            if 'survival' in ch.proficiencies:
                 window['-survival-'].update('Survival: '+str(ch.get_survival()))
         if event == 'Max HP':
             ch.set_hpMax(sg.popup_get_text('Enter new Max HP:', icon = images.dragon))
