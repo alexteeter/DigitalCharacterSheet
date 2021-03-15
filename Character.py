@@ -62,7 +62,7 @@ class Character:
         self.chaMod = self.mod(self.charisma)
         return self.chaMod
     def get_passive_perception(self):
-        self.passivePerception = 10+self.get_wis_mod()
+        self.passivePerception = 10+self.get_perception()
         return self.passivePerception     
     def get_initiative(self):
         self.initiative = int(self.get_dex_mod()) + int(self.initiative_bonus)

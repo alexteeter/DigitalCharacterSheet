@@ -1,0 +1,6 @@
+03-15-21
+-Added new checkbox system to set character proficiencies
+-Editable spells
+-Fixed passive perception not getting proficiency bonus
+-Other Minor bug fixes, misspellings, etc.
+-Added changelog

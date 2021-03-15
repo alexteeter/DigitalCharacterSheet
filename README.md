@@ -19,4 +19,4 @@ Place executable in any clean folder, and click to run- that's it.
 Upon first use, you will need to create (or import a character). The program will prompt the user for basic character stats (e.g. Name, Class, Ability Scores, etc.).
 #### Note:
 When entering proficiencies, the program expects a comma seperated list- i.e. "Wisdom, Charisma, Athletics, Intimidation".
-Other items such as Feats/Actions/Spells, etc. can be added/removed in the "Stats" drop down menu.
+Other items such as Feats/Actions/Spells, etc. can be added/removed in their respective menus.
