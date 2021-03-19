@@ -55,11 +55,11 @@ def display_character(ch):
     logging.info('Displaying Character...')
     #############################################
     menu_def = [['File', ['Open', 'Save', 'New', 'Delete...']],
-                ['Edit', ['Change Stats']],
+                ['Edit', ['Change Stats', 'Options']],
                 ['Help']]
-    hitDice_frame = [[sg.T(ch.currentHitDice, key='-currentHitDice-'), sg.T(' / ' + ch.hitDice, key = '-hit_dice-')],
+    hitDice_frame = [[sg.T(ch.currentHitDice, key='-currentHitDice-'), sg.T(' / ' + ch.hitDice, key = '-hit_dice-'), sg.T(ch.hit_die, key = '-hit_die-')],
                     [sg.Button('Use Hit Die'), sg.Button('Replenish')]]
-    name_frame = [[sg.T('Level: ' + ch.level,key='-level-'),sg.T(ch.charClass,key='-charClass-'),sg.T('Race: ' + ch.race,key='-race-')],
+    name_frame = [[sg.T('Level: ' + ch.level,key='-level-'),sg.T(ch.charClass,key='-charClass-'),sg.T('Race: ' + ch.race,key='-race-'), sg.Button('Languages...')],
                 [sg.Frame('Armor Class',[[sg.T(ch.armorClass, key='-armorClass-')]]),sg.Frame('Proficiency Bonus',[[sg.T(ch.prof,key='-prof-')]]),sg.Frame('HP',[[sg.T('0' + ch.hpCurrent, key='-hpCurrent-'), sg.T(' / '), sg.T(ch.hpMax, key='-hpMax-')],
                                                                                                                                 [sg.B('Damage'),sg.B('Heal')]]),sg.Frame('Hit Dice',hitDice_frame)],
                 ]
@@ -214,6 +214,8 @@ def display_character(ch):
             ch.inspiration = True
             window['-insp-'].update(ch.inspiration)
         ###
+        if event == 'Languages...':
+            display_lang(ch)
         if event == 'Actions...':
             display_actions(ch)
         if event == 'Spells...':
@@ -391,7 +393,6 @@ def create_character():
             [sg.T('Name: ')],
             [sg.T('Race: ')],
             [sg.T('Subrace: ')],
-            [sg.T('Languages: ')],
             [sg.T('Class: ')],
             [sg.T('Level: ')],
             [sg.T('Proficiency Bonus: ')],
@@ -403,8 +404,8 @@ def create_character():
             [sg.T('Wisdom: ')],
             [sg.T('Charisma: ')],
             [sg.T('Max HP: ')],
+            [sg.T('Hit Die: ')],
             [sg.T('Hit Dice: ')],
-            #[sg.T('Proficiencies: ')],
             [sg.T('Gold: ')]
             ]
     col2 = [
@@ -412,7 +413,6 @@ def create_character():
             [sg.In(key='-name-')],
             [sg.In(key='-race-')],
             [sg.In(key='-subrace-')],
-            [sg.In(key='-languages-')],
             [sg.In(key='-charClass-')],
             [sg.In(key='-level-')],
             [sg.In(key='-prof-')],
@@ -424,8 +424,8 @@ def create_character():
             [sg.In(key='-wisdom-')],
             [sg.In(key='-charisma-')],
             [sg.In(key='-hpMax-')],
+            [sg.In(key='-hit_die-')],
             [sg.In(key='-hitDice-')],
-            #[sg.In(key='-proficiencies-')],
             [sg.In(key='-gold-')]
             ]
     layout = [[sg.Column(col1), sg.Column(col2, element_justification='r')],
@@ -441,7 +441,6 @@ def create_character():
     name = values['-name-']
     race = values['-race-']
     subrace = values['-subrace-']
-    languages = values['-languages-']
     charClass = values['-charClass-']
     level = values['-level-']
     proficiency = values['-prof-']
@@ -454,6 +453,7 @@ def create_character():
     charisma = values['-charisma-']
     hpMax = values['-hpMax-']
     hitDice = values['-hitDice-']
+    hit_die = values['-hit_die-']
     #profRaw = values['-proficiencies-']
     #proficiencies = profRaw.split(', ')
     #[string.casefold() for string in proficiencies]
@@ -464,18 +464,19 @@ def create_character():
     #weapons = weaponsRaw.split(', ')
     #Proficiencies Window
     proficiencies = set_proficiencies()
-    try:
-        logging.info('Creating Character...')
-        character = dnd.Character(level, proficiency, armorClass, strength, dex, constitution, intelligence, wisdom, charisma, hpMax, gold, name = name, race = race, subrace = subrace, languages = languages, charClass = charClass, hitDice = hitDice)
-        character.proficiencies = proficiencies
-        #character.equipment = equipment
-        #character.weapons = weapons
-        character.inspiration = False
-        logging.info('Character Created!')
-    except:
-        logging.error('Character creation failed!')
-        sg.PopupError('Failed to Create Character!', icon = images.dragon)
-        return None
+    #try:
+    logging.info('Creating Character...')
+    character = dnd.Character(level, proficiency, armorClass, strength, dex, constitution, intelligence, wisdom, charisma, hpMax, gold, name = name, race = race, subrace = subrace,charClass = charClass, hitDice = hitDice, hit_die = hit_die)
+    #character.languages = languages
+    character.proficiencies = proficiencies
+    #character.equipment = equipment
+    #character.weapons = weapons
+    character.inspiration = False
+    logging.info('Character Created!')
+    #except:
+    #    logging.error('Character creation failed!')
+    #    sg.PopupError('Failed to Create Character!', icon = images.dragon)
+    #    return None
     return character
 def set_proficiencies():
     logging.info('Getting Proficiencies...')
@@ -643,7 +644,8 @@ def change_stats(window, ch):
             [sg.Button('Max HP')],
             [sg.Button('Armor Class')],
             [sg.Button('Race?')],
-            [sg.Button('Proficiencies')]
+            [sg.Button('Proficiencies')],
+            [sg.Button('Hit Die')]
             ]
     
     layout = [
@@ -873,6 +875,11 @@ def change_stats(window, ch):
         if event == 'Hit Dice':
             ch.set_hitDice(sg.popup_get_text('Enter New Hit Dice:', icon = images.dragon))
             window['-hit_dice-'].update(' / ' + ch.hitDice)
+        if event == 'Hit Die':
+            logging.debug('Hit Die Button selected!')
+            ch.set_hit_die(sg.popup_get_text('Enter Hit Die:', icon = images.dragon))
+            window['-hit_die-'].update(ch.hit_die)
+            logging.debug('Hit Die set to ' + ch.hit_die)
     changeWindow.close()
     
 def display_actions(ch):
@@ -883,9 +890,9 @@ def display_actions(ch):
     index = 0
     for action in ch.actions:
         if index%2 == 0:
-            col1 += [[sg.Frame(action['name'], [[sg.Multiline(action['description'])]])]]
+            col1 += [[sg.Frame(action['name'], [[sg.Multiline(action['description'])], [sg.Button('Edit', key = action['name'])]])]]
         else:
-            col2 += [[sg.Frame(action['name'], [[sg.Multiline(action['description'])]])]]
+            col2 += [[sg.Frame(action['name'], [[sg.Multiline(action['description'])], [sg.Button('Edit', key = action['name'])]])]]
         index += 1
     layout += [[sg.Column(col1), sg.Column(col2)],
                 [sg.Button('Add Action...'), sg.Button('Remove Action...')]]
@@ -894,12 +901,17 @@ def display_actions(ch):
         event, values = window.read()
         if event == None or event == 'Back':
             break
-        if event == 'Add Action...':
+        elif event == 'Add Action...':
             add_action(ch)
             window.close()
             display_actions(ch)
-        if event == 'Remove Action...':
+        elif event == 'Remove Action...':
             remove_action(ch)
+            window.close()
+            display_actions(ch)
+        elif event != None:
+            action = next(action for action in ch.actions if action['name'] == event)
+            edit_item(action)
             window.close()
             display_actions(ch)
         window.close()
@@ -907,8 +919,22 @@ def display_actions(ch):
 def add_action(ch): 
     logging.info('Adding action...')
     name = sg.popup_get_text('Enter Name:', icon = images.dragon)
+    if name is None or name == '':
+        logging.info('Cancelling Add Action')
+        return
+    try:
+        if next(action for action in ch.actions if action['name'] == name):
+            sg.PopupError('Action already exists! Please use a different name.')
+            logging.error('Action name already exists! Cancelling Add Action')
+            return
+    except:
+        pass
     descript = sg.popup_get_text('Enter Description:', icon = images.dragon)
+    if descript is None:
+        logging.info('Cancelling Add Action')
+        return
     ch.add_action(ch.Action(name, description = descript))
+    logging.info('Action added!')
 
 def remove_action(ch):
     logging.info('Removing Action...')
@@ -947,9 +973,9 @@ def display_feats(ch):
     index = 0
     for feat in ch.feats:
         if index%2 == 0:
-            col1 += [[sg.Frame(feat['name'], [[sg.Multiline(feat['description'])]])]]
+            col1 += [[sg.Frame(feat['name'], [[sg.Multiline(feat['description'])], [sg.Button('Edit', key = feat['name'])]])]]
         else:
-            col2 += [[sg.Frame(feat['name'], [[sg.Multiline(feat['description'])]])]]
+            col2 += [[sg.Frame(feat['name'], [[sg.Multiline(feat['description'])], [sg.Button('Edit', key = feat['name'])]])]]
         index += 1
     layout += [[sg.Column(col1), sg.Column(col2)],
                 [sg.Button('Add Feat...'), sg.Button('Remove Feat...')]]
@@ -958,21 +984,62 @@ def display_feats(ch):
         event, values = window.read()
         if event == None or event == 'Back':
             break
-        if event == 'Add Feat...':
-            
+        elif event == 'Add Feat...':
             add_feat(ch)
             window.close()
             display_feats(ch)
-        if event == 'Remove Feat...':
+        elif event == 'Remove Feat...':
             remove_feat(ch)
             window.close()
             display_feats(ch)
+        elif event != None:
+            feat = next(feat for feat in ch.feats if feat['name'] == event)
+            edit_item(feat)
+            window.close()
+            display_feats(ch)
         window.close()
-        
+
+def edit_item(item):
+    layout = [[]]
+    col1 = [[sg.T('Name')],
+            [sg.T('Description')]
+            ]
+    col2 = [[sg.Input(default_text=item['name'], key = '-name-')],
+            [sg.Multiline(default_text=item['description'], key = '-description-')]
+            ]
+    layout = [[sg.Column(col1, element_justification='l'), sg.Column(col2, element_justification='l')],
+                [sg.Button('Save'), sg.Button('Back')]
+                ]
+    window = sg.Window('Edit Item', layout, icon = images.dragon)
+    while True:
+        event, values = window.read()
+        if event == None or event == 'Back':
+            window.close()
+            logging.info('Item Edit cancelled')
+            return
+        if event == 'Save':
+            break
+    item['name'] = values['-name-']
+    item['description'] = values['-description-']
+    logging.info('Item edited!')
+    window.close()
 def add_feat(ch): 
     logging.info('Adding Feat...')
     name = sg.popup_get_text('Enter Name:', icon = images.dragon)
+    if name is None or name == '':
+        logging.info('Cancelling Add Feat')
+        return
+    try:
+        if next(feat for feat in ch.feats if feat['name'] == name):
+            sg.PopupError('Feat already exists! Please use a different name.')
+            logging.error('Feat ' + name + 'already exists! Cancelling Add Action')
+            return
+    except:
+        pass
     descript = sg.popup_get_text('Enter Description:', icon = images.dragon)
+    if descript is None:
+        logging.info('Cancelling Add Feat')
+        return
     ch.add_feat(ch.Feat(name, description = descript))
     logging.info(name + ' added!')
 
@@ -1197,6 +1264,64 @@ def edit_spell_slots(ch):
     logging.info('Editing spell slots...')
     ch.set_spell_slot(int(sg.popup_get_text('Enter Slot Level', icon = images.dragon)), int(sg.popup_get_text('Enter Number of Total Slots', icon = images.dragon)))
 
+def display_lang(ch):
+    logging.info('Displaying Languages...')
+    layout = [[sg.Text(ch.name + '\'s Tongues',font='Any 20')]]
+    col1 = [[]]
+    col2 = [[]]
+    index = 0
+    for item in ch.languages:
+        if index%2 == 0:
+            col1 += [[sg.Text('• ' + item)]]
+        else:
+            col2 += [[sg.Text('• ' + item)]]
+        index += 1
+    layout += [[sg.Column(col1),sg.Column(col2)],
+                [sg.Button('Add Language...'), sg.Button('Remove Language...'), sg.Button('Back')]]
+    window = sg.Window('Languages', layout, icon = images.dragon)
+    while True:
+        event, values = window.read()
+        if event == None or event == 'Back':
+            break
+        if event == 'Add Language...':
+            add_lang(ch)
+            window.close()
+            display_lang(ch)
+        if event == 'Remove Language...':
+            remove_lang(ch)
+            window.close()
+            display_lang(ch)
+    window.close()
+
+def remove_lang(ch):
+    remove_layout = [[]]
+    col1 = [[]]
+    col2 = [[]]
+    index = 0
+    for item in ch.languages:
+        if index%2 == 0:
+            col1 += [[sg.Button(item)]]
+        else:
+            col2 += [[sg.Button(item)]]
+        index += 1
+    remove_layout = [[sg.Text('Choose Language to Remove')],
+                    [sg.Column(col1), sg.Column(col2)],
+                    [sg.Button('Back')]]
+    remove_window = sg.Window('Remove Language', remove_layout, icon = images.dragon)
+    while True:
+        event, values = remove_window.read()
+        if event == None or event == 'Back':
+            break
+        if event != None:
+            ch.languages.remove(event)
+            logging.info(event + ' removed from language list!')
+            sg.Popup(event + ' removed!', icon = images.dragon)
+            remove_window.close()
+            remove_lang(ch)
+    remove_window.close()
+
+def add_lang(ch):
+    ch.languages.append(sg.popup_get_text('Enter Language: ', icon = images.dragon))
 def display_equipment(ch):
     logging.info('Displaying equipment...')
     layout = [[sg.Text(ch.name + '\'s Equipment',font='Any 20')]]

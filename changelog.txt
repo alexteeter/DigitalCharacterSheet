@@ -1,3 +1,13 @@
+03-19-21
+-Language Box added!
+	-Languages are no longer required for character creation
+	-Languages can be added and removed
+-Added display for Hit Die type
+	-added method to edit hit die type
+-Editable Feats and Actions
+	-Feats/actions cannot share share name, now program will catch this
+-Fixed bug where cancelling adding a feat or action would crash the program
+
 03-15-21
 -Added new checkbox system to set character proficiencies
 -Editable spells

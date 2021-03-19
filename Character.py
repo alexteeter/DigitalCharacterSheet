@@ -1,17 +1,21 @@
 import configparser
 import os
 import math
+import sys
+import logging
+
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 global path
 path = os.getcwd()
 
 class Character:
-    def __init__(self, level: int, profenciency: int, armorClass: int, strength: int, dex: int, constitution: int, intelligence: int, wisdom: int, charisma: int, hpMax: int, gold: float, name = None, race = None, subrace = None, languages = None, charClass = None, hitDice = None):
+    def __init__(self, level: int, profenciency: int, armorClass: int, strength: int, dex: int, constitution: int, intelligence: int, wisdom: int, charisma: int, hpMax: int, gold: float, name = None, race = None, subrace = None, charClass = None, hitDice = None, hit_die = ''):
         #self.weapons = self.Weapon()
         self.name = name
         self.race = race
         self.subrace = subrace
-        self.languages = languages
+        self.languages = []
         self.charClass = charClass
         self.level = level
         self.prof = profenciency
@@ -27,6 +31,7 @@ class Character:
         self.gold = gold
         self.hitDice = hitDice
         self.currentHitDice = self.hitDice
+        self.hit_die = hit_die
         self.equipment = []
         self.actions = []
         self.feats = []
@@ -283,6 +288,8 @@ class Character:
         self.hitDice = dice
     def set_current_hit_dice(self, dice):
         self.currentHitDice = dice
+    def set_hit_die(self, die):
+        self.hit_die = die
     def add_prof(self, prof):
         self.proficiencies.append(prof)
     def set_initiative_bonus(self, bonus):
@@ -322,6 +329,7 @@ class Character:
                            'charisma':self.charisma,
                            'hpMax':self.hpMax,
                            'hitDice':self.hitDice,
+                           'hit_die':self.hit_die,
                            'proficiencies':self.proficiencies,
                            'initiative_bonus':self.initiative_bonus,
                            'actions':self.actions,
@@ -392,12 +400,16 @@ def load_character(file):
     config = configparser.ConfigParser()
     #filename = str(path) + '/characters/' + file + '.ini'
     config.read(file)
-    ch = Character(config['STATS']['level'],config['STATS']['proficiency'],config['STATS']['armorClass'],config['STATS']['strength'],config['STATS']['dex'],config['STATS']['constitution'],config['STATS']['intelligence'],config['STATS']['wisdom'],config['STATS']['charisma'],config['STATS']['hpMax'],config['EQUIPMENT']['gold'],name = config['STATS']['name'],race = config['STATS']['race'],subrace = config['STATS']['subrace'],languages = config['STATS']['languages'],charClass = config['STATS']['charClass'], hitDice = config['STATS']['hitdice'])
+    ch = Character(config['STATS']['level'],config['STATS']['proficiency'],config['STATS']['armorClass'],config['STATS']['strength'],config['STATS']['dex'],config['STATS']['constitution'],config['STATS']['intelligence'],config['STATS']['wisdom'],config['STATS']['charisma'],config['STATS']['hpMax'],config['EQUIPMENT']['gold'],name = config['STATS']['name'],race = config['STATS']['race'],subrace = config['STATS']['subrace'],charClass = config['STATS']['charClass'], hitDice = config['STATS']['hitdice'])
     ch.initiative_bonus = config['STATS']['initiative_bonus']
     ch.inspiration = config['STATUS']['inspiration']
     ch.hpCurrent = config['STATUS']['hpCurrent']
     ch.currentHitDice = config['STATUS']['currentHitDice']
     ch.isDown = eval(config['STATUS']['isDown'])
+    try:
+        ch.languages = eval(config['STATS']['languages'])
+    except:
+        pass
     try:
         for pool in eval(config['STATUS']['pools']):
             name = pool['name']
@@ -426,6 +438,11 @@ def load_character(file):
     try:
         ch.current_spell_slots = eval(config['STATUS']['current_spell_slots'])
     except:
+        pass
+    try:
+        ch.hit_die = config['STATS']['hit_die']
+    except:
+        logging.debug('hit_die not loaded!')
         pass
     proficiencies = eval(config['STATS']['proficiencies'])
     ch.proficiencies = [string.casefold() for string in proficiencies]
