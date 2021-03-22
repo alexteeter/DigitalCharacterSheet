@@ -400,7 +400,11 @@ def load_character(file):
     config = configparser.ConfigParser()
     #filename = str(path) + '/characters/' + file + '.ini'
     config.read(file)
-    ch = Character(config['STATS']['level'],config['STATS']['proficiency'],config['STATS']['armorClass'],config['STATS']['strength'],config['STATS']['dex'],config['STATS']['constitution'],config['STATS']['intelligence'],config['STATS']['wisdom'],config['STATS']['charisma'],config['STATS']['hpMax'],config['EQUIPMENT']['gold'],name = config['STATS']['name'],race = config['STATS']['race'],subrace = config['STATS']['subrace'],charClass = config['STATS']['charClass'], hitDice = config['STATS']['hitdice'])
+    ch = Character(config['STATS']['level'],config['STATS']['proficiency'],config['STATS']['armorClass'],config['STATS']['strength'],   \
+        config['STATS']['dex'],config['STATS']['constitution'],config['STATS']['intelligence'],config['STATS']['wisdom'],               \
+        config['STATS']['charisma'],config['STATS']['hpMax'],config['EQUIPMENT']['gold'],name = config['STATS']['name'],                \
+        race = config['STATS']['race'],subrace = config['STATS']['subrace'],charClass = config['STATS']['charClass'],                   \
+        hitDice = config['STATS']['hitdice'])
     ch.initiative_bonus = config['STATS']['initiative_bonus']
     ch.inspiration = config['STATUS']['inspiration']
     ch.hpCurrent = config['STATUS']['hpCurrent']

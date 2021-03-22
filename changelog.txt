@@ -1,3 +1,17 @@
+03-22-21
+-Code
+	-Refactored code into neater foler structure (src, etc.)
+	-Most methods are now seperated in the character_tools package, instead of all in the build.py file
+		-easier searching and editing, build.py script is way smaller now
+-Proficiencies
+	Fixed bug where 'Persuasion' was not getting Proficiency bonus (thanks to a misspelling)
+-Spells
+	-Refactored into separate script
+	-Now gives warning if user attempts to use empty spell slot
+-Feats
+	-Refactored into separate script
+-Actions
+	-Refactored into separate script
 03-19-21
 -Language Box added!
 	-Languages are no longer required for character creation

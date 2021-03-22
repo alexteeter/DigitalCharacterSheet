@@ -15,7 +15,7 @@ Also you will need to install PySimpleGUI, which can be done using the Pip insta
 Only Windows is needed.
 
 ## Use
-Place executable in any clean folder, and click to run- that's it.
+Place executable in any clean folder, and click to run- that's it. I recommend making an installation folder just for the program, so the save files will be easy to find.
 Upon first use, you will need to create (or import a character). The program will prompt the user for basic character stats (e.g. Name, Class, Ability Scores, etc.).
 #### Note:
-This project was made for my own DnD campaign and is worked in my free time. Updates may be sporadic and based around issues and UI elements I come arcoss personally. If you use this software, feel free to leave any feedback.
+This project was made for my own DnD campaign and is worked on in my free time. Updates may be sporadic and based around issues and UI elements I come arcoss personally. If you use this software, feel free to leave any feedback.
