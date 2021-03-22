@@ -563,7 +563,7 @@ def set_proficiencies():
     if values['-perf-']:
         prof.append('performance')
     if values['-pers-']:
-        prof.append('persuassion')
+        prof.append('persuasion')
     if values['-rel-']:
         prof.append('religion')
     if values['-soh-']:
