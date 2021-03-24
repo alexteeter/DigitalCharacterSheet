@@ -1,15 +1,19 @@
 import Character as dnd
 import PySimpleGUI as sg
 import character_tools
+from options import options
 import sys
 import os
 import json
 import images
 import logging
 
-sg.theme('DarkGrey')
-
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
+opt = options.Options()
+
+sg.theme(opt.theme)
+
 
 def get_character():
     logging.info('Getting Character...')
@@ -65,19 +69,35 @@ def display_character(ch):
                                                                                                                                 [sg.B('Damage'),sg.B('Heal')]]),sg.Frame('Hit Dice',hitDice_frame)],
                 ]
 
-    stat_frame = [[sg.Frame('Strength',[[sg.T(ch.get_str_mod(),font='Any 22',key='-strMod-')],
-                [sg.T(ch.strength,key='-STR-')]])],
-                [sg.Frame('Dexterity',[[sg.T(ch.get_dex_mod(),font='Any 22',key='-dexMod-')],
-                [sg.T(ch.dex,key='-DEX-')]])],
-                [sg.Frame('Constitution',[[sg.T(ch.get_con_mod(),font='Any 22',key='-conMod-')],
-                [sg.T(ch.con,key='-CON-')]])],
-                [sg.Frame('Intelligence',[[sg.T(ch.get_int_mod(),font='Any 22',key='-intMod-')],
-                [sg.T(ch.intelligence,key='-INT-')]])],
-                [sg.Frame('Wisdom',[[sg.T(ch.get_wis_mod(),font='Any 22',key='-wisMod-')],
-                [sg.T(ch.wisdom,key='-WIS-')]])],
-                [sg.Frame('Charisma',[[sg.T(ch.get_cha_mod(),font='Any 22',key='-chaMod-')],
-                [sg.T(ch.charisma,key='-CHA-')]])],
-                ]
+    if opt.mod_size == 'Big':
+        stat_frame = [[sg.Frame('Strength',[[sg.T(ch.get_str_mod(),font='Any 22',key='-strMod-')],
+                    [sg.T(ch.strength,key='-STR-')]])],
+                    [sg.Frame('Dexterity',[[sg.T(ch.get_dex_mod(),font='Any 22',key='-dexMod-')],
+                    [sg.T(ch.dex,key='-DEX-')]])],
+                    [sg.Frame('Constitution',[[sg.T(ch.get_con_mod(),font='Any 22',key='-conMod-')],
+                    [sg.T(ch.con,key='-CON-')]])],
+                    [sg.Frame('Intelligence',[[sg.T(ch.get_int_mod(),font='Any 22',key='-intMod-')],
+                    [sg.T(ch.intelligence,key='-INT-')]])],
+                    [sg.Frame('Wisdom',[[sg.T(ch.get_wis_mod(),font='Any 22',key='-wisMod-')],
+                    [sg.T(ch.wisdom,key='-WIS-')]])],
+                    [sg.Frame('Charisma',[[sg.T(ch.get_cha_mod(),font='Any 22',key='-chaMod-')],
+                    [sg.T(ch.charisma,key='-CHA-')]])],
+                    ]
+    if opt.mod_size == 'Small':
+        stat_frame = [[sg.Frame('Strength',[[sg.T(ch.strength,font='Any 22',key='-STR-')],
+                    [sg.T(ch.get_str_mod(),key='-strMod-')]])],
+                    [sg.Frame('Dexterity',[[sg.T(ch.dex,font='Any 22',key='-DEX-')],
+                    [sg.T(ch.get_dex_mod(),key='-dexMod-')]])],
+                    [sg.Frame('Constitution',[[sg.T(ch.con,font='Any 22',key='-CON-')],
+                    [sg.T(ch.get_con_mod(),key='-conMod-')]])],
+                    [sg.Frame('Intelligence',[[sg.T(ch.intelligence,font='Any 22',key='-INT-')],
+                    [sg.T(ch.get_int_mod(),key='-intMod-')]])],
+                    [sg.Frame('Wisdom',[[sg.T(ch.wisdom,font='Any 22',key='-WIS-')],
+                    [sg.T(ch.get_wis_mod(),key='-wisMod-')]])],
+                    [sg.Frame('Charisma',[[sg.T(ch.charisma,font='Any 22',key='-CHA-')],
+                    [sg.T(ch.get_cha_mod(),key='-chaMod-')]])],
+                    ]
+
     savingThrows_frame = [[sg.Frame('Strength',[[sg.T(ch.get_str_save(),key='-strSave-')]])],
                         [sg.Frame('Dexterity',[[sg.T(ch.get_dex_save(),key='-dexSave-')]])],
                         [sg.Frame('Constitution',[[sg.T(ch.get_con_save(),key='-conSave-')]])],
@@ -288,6 +308,11 @@ def display_character(ch):
                 character_tools.stats.change_stats(window, ch)
             except:
                 sg.PopupError('Failed to Set Stat!', icon = images.dragon)
+        if event == 'Options':
+            opt.change_options()
+            window.close()
+            display_character(ch)
+        ###
         if event == 'Pools...':
             character_tools.pool.show_pools(ch)
         if event == 'Add Weapon...':
