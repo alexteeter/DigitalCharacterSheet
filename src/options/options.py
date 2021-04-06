@@ -12,7 +12,7 @@ class Options:
             self.load_options()
         except:
             logging.error('Failed to load preferences!')
-            self.mod_size = 'big'
+            self.mod_size = 'Big'
             self.theme = 'DarkGrey'
             self.save_options()
         sg.theme(self.theme)

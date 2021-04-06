@@ -1,6 +1,10 @@
+04-06-21
+-Fixed typo that caused crash on installations that did not have preferences already saved
+-Spells
+	-Added Boxes for Attack Rolls and DC sava calculations
 03-22-21
 -Code
-	-Refactored code into neater foler structure (src, etc.)
+	-Refactored code into neater folder structure (src, etc.)
 	-Most methods are now seperated in the character_tools package, instead of all in the build.py file
 		-easier searching and editing, build.py script is way smaller now
 -Proficiencies
