@@ -10,7 +10,7 @@ global path
 path = os.getcwd()
 
 class Character:
-    def __init__(self, level: int, profenciency: int, armorClass: int, strength: int, dex: int, constitution: int, intelligence: int, wisdom: int, charisma: int, hpMax: int, gold: float, name = None, race = None, subrace = None, charClass = None, hitDice = None, hit_die = ''):
+    def __init__(self, level: int, profenciency: int, armorClass: int, strength: int, dex: int, constitution: int, intelligence: int, wisdom: int, charisma: int, hpMax: int, gold: float, name = None, race = None, subrace = None, charClass = None, hitDice = None, hit_die = '', spell_mod = ''):
         #self.weapons = self.Weapon()
         self.name = name
         self.race = race
@@ -32,6 +32,7 @@ class Character:
         self.hitDice = hitDice
         self.currentHitDice = self.hitDice
         self.hit_die = hit_die
+        self.spell_mod = spell_mod
         self.equipment = []
         self.actions = []
         self.feats = []
@@ -227,6 +228,23 @@ class Character:
         self.wisdom = wisdom
     def set_charisma(self, charisma):
         self.charisma = charisma
+    def set_spell_mod(self, mod):
+        self.spell_mod = mod
+    def get_spell_mod(self):
+        if self.spell_mod == 'STR':
+            return self.get_str_mod()
+        if self.spell_mod == 'DEX':
+            return self.get_dex_mod()
+        if self.spell_mod == 'CON':
+            return self.get_con_mod()
+        if self.spell_mod == 'INT':
+            return self.get_int_mod()
+        if self.spell_mod == 'WIS':
+            return self.get_wis_mod()
+        if self.spell_mod == 'CHA':
+            return self.get_cha_mod()
+        else:
+            return 0
     def set_hpMax(self, hpMax):
         self.hpMax = hpMax
     def set_gold(self, gold):
@@ -335,7 +353,8 @@ class Character:
                            'actions':self.actions,
                            'feats':self.feats,
                            'spells':self.spells,
-                           'spell_slots':self.spell_slots}
+                           'spell_slots':self.spell_slots,
+                           'spell_mod':self.spell_mod}
         pool_list = []
         for pool in self.pools:
             pool_list.append(vars(pool))
@@ -441,6 +460,10 @@ def load_character(file):
         pass
     try:
         ch.current_spell_slots = eval(config['STATUS']['current_spell_slots'])
+    except:
+        pass
+    try:
+        ch.spell_mod = eval(config['STATS']['spell_mod'])
     except:
         pass
     try:

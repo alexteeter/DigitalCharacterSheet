@@ -15,7 +15,8 @@ def change_stats(window, ch):
             [sg.Button('Charisma')],
             [sg.Button('Spell Slots')],
             [sg.Button('Level')],
-            [sg.Button('Hit Dice')]
+            [sg.Button('Hit Dice')],
+            [sg.Button('Spell Mod')]
             ]
     
     col2 = [
@@ -262,6 +263,13 @@ def change_stats(window, ch):
             ch.set_hit_die(sg.popup_get_text('Enter Hit Die:', icon = images.dragon))
             window['-hit_die-'].update(ch.hit_die)
             logging.debug('Hit Die set to ' + ch.hit_die)
+        if event == 'Spell Mod':
+            logging.debug('Spell Mod Button selected!')
+            mod = character_tools.hit_boxes.get_spell_mod()
+            if mod != None:
+                ch.set_spell_mod(mod)
+                window['-hit_die-'].update(ch.hit_die)
+                logging.debug('Spell Mod set to ' + ch.spell_mod)
     changeWindow.close()
  
 def set_proficiencies():

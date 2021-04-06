@@ -7,7 +7,10 @@ import images
 def display_spells(ch):
     logging.info('Displaying Spells...')
     layout = [[sg.Text('Spells', font='Any 20')]]
-    col0 = [[sg.Frame('Slots', show_spell_slots(ch))]]
+    col0 = [[sg.Frame('Slots', show_spell_slots(ch))],
+            [sg.Frame('Spell Attack Mod',character_tools.hit_boxes.spell_attack(ch.get_spell_mod(), ch.prof))],
+            [sg.Frame('Spell Save DC',character_tools.hit_boxes.spell_dc(ch.get_spell_mod(), ch.prof))]
+            ]
     col1 = [[]]
     col2 = [[]]
     index = 0

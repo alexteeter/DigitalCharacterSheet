@@ -11,6 +11,7 @@ from character_tools import languages
 from character_tools import pool
 from character_tools import weapons
 from character_tools import equipment
+from character_tools import hit_boxes
 
 def edit_item(item):
     layout = [[]]
