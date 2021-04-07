@@ -463,7 +463,7 @@ def load_character(file):
     except:
         pass
     try:
-        ch.spell_mod = eval(config['STATS']['spell_mod'])
+        ch.spell_mod = config['STATS']['spell_mod']
     except:
         pass
     try:
